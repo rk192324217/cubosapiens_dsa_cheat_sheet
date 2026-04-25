@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Master Cheat Sheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f8f8f4;
+    --gray-light: #e8e8e0;
+    --gray-mid: #c0c0b4;
+    --gray-dark: #5a5a52;
+    --border: 1.5px solid #0a0a0a;
+    --border-thin: 0.5px solid #0a0a0a;
+    --border-thick: 3px solid #0a0a0a;
+  }
+
+  @media print {
+    @page { size: A2 landscape; margin: 0; }
+    body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .no-print { display: none; }
+  }
+
+  html, body {
+    background: #d0d0c4;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .page {
+    width: 1190px;
+    min-height: 840px;
+    background: var(--white);
+    margin: 20px auto;
+    padding: 28px 28px 24px;
+    position: relative;
+    border: 2px solid #888;
+    box-shadow: 8px 8px 0 #888;
+  }
+
+  /* HEADER */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    border-bottom: var(--border-thick);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .header-left .label {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gray-dark);
+    font-family: 'Space Mono', monospace;
+  }
+  .header-left .sub {
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    color: var(--black);
+  }
+  .main-title {
+    text-align: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--black);
+  }
+  .main-title em {
+    font-style: italic;
+    font-size: 32px;
+  }
+  .header-right {
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gray-dark);
+    line-height: 1.6;
+  }
+  .mindset-badge {
+    display: inline-block;
+    background: var(--black);
+    color: var(--white);
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    font-family: 'Space Mono', monospace;
+    margin-top: 4px;
+  }
+
+  /* MAIN GRID */
+  .content {
+    display: grid;
+    grid-template-columns: 220px 1fr 200px;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    height: calc(100% - 90px);
+  }
+
+  /* PHASE COLUMN */
+  .phases-col {
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .col-label {
+    font-size: 8px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+    color: var(--gray-dark);
+    margin-bottom: 2px;
+    border-bottom: var(--border-thin);
+    padding-bottom: 4px;
+  }
+
+  .phase-card {
+    border: var(--border);
+    padding: 7px 9px;
+    position: relative;
+    background: var(--white);
+  }
+  .phase-card.filled {
+    background: var(--black);
+    color: var(--white);
+  }
+  .phase-card.striped {
+    background: repeating-linear-gradient(
+      45deg,
+      var(--white) 0px,
+      var(--white) 4px,
+      var(--gray-light) 4px,
+      var(--gray-light) 8px
+    );
+  }
+
+  .phase-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    line-height: 1;
+    color: inherit;
+    float: left;
+    margin-right: 6px;
+  }
+  .phase-card.filled .phase-num { color: var(--white); }
+
+  .phase-days {
+    font-size: 7.5px;
+    letter-spacing: 2px;
+    font-family: 'Space Mono', monospace;
+    color: var(--gray-dark);
+    display: block;
+    margin-bottom: 1px;
+  }
+  .phase-card.filled .phase-days { color: var(--gray-mid); }
+
+  .phase-name {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    color: inherit;
+  }
+  .phase-goal {
+    font-size: 9px;
+    color: var(--gray-dark);
+    font-style: italic;
+    font-family: 'DM Serif Display', serif;
+    margin-top: 3px;
+    clear: both;
+    border-top: var(--border-thin);
+    padding-top: 3px;
+  }
+  .phase-card.filled .phase-goal { color: var(--gray-mid); border-top-color: #444; }
+
+  .phase-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 4px;
+    clear: both;
+  }
+  .topic-tag {
+    font-size: 8.5px;
+    font-family: 'Space Mono', monospace;
+    background: var(--gray-light);
+    padding: 2px 5px;
+    border: var(--border-thin);
+  }
+  .phase-card.filled .topic-tag {
+    background: #2a2a2a;
+    color: var(--white);
+    border-color: #555;
+  }
+
+  /* TRACKER CHECKBOX GRID */
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .check-label {
+    font-size: 8px;
+    font-family: 'Space Mono', monospace;
+    color: var(--gray-dark);
+    width: 48px;
+    flex-shrink: 0;
+  }
+  .phase-card.filled .check-label { color: var(--gray-mid); }
+  .check-boxes {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+  }
+  .cb {
+    width: 11px;
+    height: 11px;
+    border: 1px solid currentColor;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .phase-card.filled .cb { border-color: #888; }
+
+  /* MIDDLE — PATTERNS */
+  .patterns-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 6px;
+  }
+
+  .pattern-card {
+    border: var(--border);
+    padding: 8px 10px;
+    position: relative;
+  }
+  .pattern-card.dark {
+    background: var(--black);
+    color: var(--white);
+  }
+  .pattern-card.light {
+    background: var(--white);
+  }
+  .pattern-card.gray {
+    background: var(--gray-light);
+  }
+
+  .pattern-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+  }
+  .pattern-card.dark .pattern-title { border-bottom-color: #444; }
+
+  .pattern-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .pattern-items li {
+    font-size: 9.5px;
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .pattern-items li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border: 1px solid currentColor;
+    display: inline-block;
+    flex-shrink: 0;
+    transform: rotate(45deg);
+  }
+  .pattern-card.dark .pattern-items li { color: #ccc; }
+
+  /* Added topics not in original */
+  .pattern-card.accent {
+    background: var(--black);
+    color: var(--white);
+    border: 2px solid var(--black);
+  }
+
+  /* COMPLEXITY TABLE */
+  .complexity-section {
+    border: var(--border);
+    padding: 8px 10px;
+    margin-top: 6px;
+  }
+  .complexity-title {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-family: 'Space Mono', monospace;
+  }
+  .complexity-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+  }
+  .complexity-item {
+    text-align: center;
+    padding: 4px 2px;
+    border: var(--border-thin);
+    font-family: 'Space Mono', monospace;
+  }
+  .complexity-item .cn {
+    font-size: 10px;
+    font-weight: 700;
+    display: block;
+  }
+  .complexity-item .ct {
+    font-size: 7.5px;
+    color: var(--gray-dark);
+    display: block;
+  }
+  .complexity-item.best { background: var(--black); color: var(--white); }
+  .complexity-item.best .ct { color: #999; }
+  .complexity-item.good { background: #1a1a1a; color: var(--white); }
+  .complexity-item.good .ct { color: #999; }
+  .complexity-item.ok { background: var(--gray-light); }
+  .complexity-item.bad { background: #d0d0d0; }
+  .complexity-item.worst { background: #b0b0b0; }
+
+  /* RIGHT COLUMN */
+  .right-col {
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* DAILY STRATEGY */
+  .daily-box {
+    border: var(--border-thick);
+    padding: 10px;
+    background: var(--black);
+    color: var(--white);
+  }
+  .daily-box .col-label { color: #888; border-bottom-color: #444; }
+  .daily-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #333;
+  }
+  .daily-row:last-child { border-bottom: none; }
+  .daily-type {
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .daily-count {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--white);
+  }
+  .daily-unit {
+    font-size: 8px;
+    font-family: 'Space Mono', monospace;
+    color: #888;
+  }
+
+  /* REFLECTION */
+  .reflect-box {
+    border: var(--border);
+    padding: 10px;
+  }
+  .reflect-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 5px 0;
+    border-bottom: var(--border-thin);
+    font-size: 9.5px;
+    font-family: 'Space Mono', monospace;
+    line-height: 1.4;
+    color: var(--black);
+  }
+  .reflect-item:last-child { border-bottom: none; }
+  .reflect-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--gray-dark);
+    flex-shrink: 0;
+    width: 14px;
+  }
+
+  /* FOCUS CHECKLIST */
+  .focus-box {
+    border: var(--border);
+    padding: 10px;
+    background: var(--gray-light);
+  }
+  .focus-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 0;
+    font-size: 9.5px;
+    font-family: 'Space Mono', monospace;
+  }
+  .focus-item .cb { border-color: var(--black); flex-shrink: 0; }
+
+  /* TRACKER PANEL */
+  .tracker-box {
+    border: var(--border);
+    padding: 10px;
+    flex: 1;
+  }
+  .tracker-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 3px;
+    margin-top: 6px;
+  }
+  .tracker-cell {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 1px solid var(--gray-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+    font-family: 'Space Mono', monospace;
+    color: var(--gray-dark);
+  }
+
+  /* MISTAKE LOG */
+  .mistake-box {
+    border: var(--border);
+    padding: 10px;
+  }
+  .mistake-line {
+    height: 18px;
+    border-bottom: var(--border-thin);
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ml-num {
+    font-size: 8px;
+    font-family: 'Space Mono', monospace;
+    color: var(--gray-dark);
+    width: 12px;
+    flex-shrink: 0;
+  }
+  .ml-line {
+    flex: 1;
+    height: 0.5px;
+    background: var(--gray-mid);
+  }
+
+  /* BOTTOM STRIP */
+  .bottom-strip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+  }
+  .bottom-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: #888;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .bottom-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 13px;
+    color: var(--white);
+    font-style: italic;
+  }
+
+  /* MISSING TOPICS SECTION */
+  .missing-section {
+    border: 2px solid var(--black);
+    padding: 8px 10px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--white) 0px,
+      var(--white) 5px,
+      var(--gray-light) 5px,
+      var(--gray-light) 10px
+    );
+  }
+  .missing-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 5px;
+  }
+  .missing-tag {
+    font-size: 8.5px;
+    font-family: 'Space Mono', monospace;
+    border: 1px solid var(--black);
+    padding: 2px 6px;
+    background: var(--white);
+  }
+
+  /* DECORATIVE ELEMENTS */
+  .corner-mark {
+    position: absolute;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 200px;
+    color: var(--gray-light);
+    right: 30px;
+    top: 60px;
+    line-height: 1;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .section-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: var(--gray-light);
+    line-height: 1;
+  }
+
+  .print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 10px 22px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    z-index: 999;
+  }
+  .print-btn:hover { background: #333; }
+
+  /* PROGRESS TRACKER SECTION */
+  .progress-section {
+    border: var(--border);
+    padding: 8px 10px;
+  }
+  .days-track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-top: 5px;
+  }
+  .day-cell {
+    width: 14px;
+    height: 14px;
+    border: 0.5px solid var(--gray-dark);
+    font-size: 6px;
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-dark);
+  }
+
+  /* ALGORITHMS TABLE */
+  .algo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    margin-top: 5px;
+  }
+  .algo-table th {
+    background: var(--black);
+    color: var(--white);
+    padding: 4px 5px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .algo-table td {
+    padding: 3px 5px;
+    border-bottom: 0.5px solid var(--gray-light);
+    vertical-align: top;
+    line-height: 1.3;
+  }
+  .algo-table tr:nth-child(even) td { background: var(--gray-light); }
+
+  .mid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">⌘ Print Poster</button>
+
+<div class="page">
+  <!-- Decorative bg number -->
+  <div class="corner-mark">∑</div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <span class="label">Pattern Training System</span>
+      <span class="sub">80-Day Mastery Roadmap</span>
+    </div>
+    <div class="main-title">
+      DSA <em>Master</em><br>Cheat Sheet
+    </div>
+    <div class="header-right">
+      <div>Name: _______________</div>
+      <div>Start Date: ___________</div>
+      <div class="mindset-badge">Not a checklist. A training system.</div>
+    </div>
+  </div>
+
+  <!-- CONTENT GRID -->
+  <div class="content">
+
+    <!-- LEFT: PHASES -->
+    <div class="phases-col">
+      <div class="col-label">— Phases &amp; Timeline</div>
+
+      <!-- Phase 1 -->
+      <div class="phase-card filled">
+        <div class="phase-num">1</div>
+        <span class="phase-days">Days 01–10</span>
+        <div class="phase-name">Foundation</div>
+        <div class="phase-goal">Build strong basics &amp; pattern recognition</div>
+        <div class="phase-topics">
+          <span class="topic-tag">Arrays</span>
+          <span class="topic-tag">Strings</span>
+          <span class="topic-tag">Hashing</span>
+          <span class="topic-tag">Two Pointers</span>
+        </div>
+        <div class="check-row">
+          <span class="check-label">progress</span>
+          <div class="check-boxes">
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-card">
+        <div class="phase-num">2</div>
+        <span class="phase-days">Days 11–20</span>
+        <div class="phase-name">Control &amp; Movement</div>
+        <div class="phase-goal">Write clean logic &amp; reduce bugs</div>
+        <div class="phase-topics">
+          <span class="topic-tag">Sliding Window</span>
+          <span class="topic-tag">Stack</span>
+          <span class="topic-tag">Linked List</span>
+        </div>
+        <div class="check-row">
+          <span class="check-label">progress</span>
+          <div class="check-boxes">
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase-card striped">
+        <div class="phase-num">3</div>
+        <span class="phase-days">Days 21–35</span>
+        <div class="phase-name">Structures</div>
+        <div class="phase-goal">Develop recursive thinking</div>
+        <div class="phase-topics">
+          <span class="topic-tag">Trees</span>
+          <span class="topic-tag">BST</span>
+          <span class="topic-tag">Recursion</span>
+        </div>
+        <div class="check-row">
+          <span class="check-label">progress</span>
+          <div class="check-boxes">
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase-card filled">
+        <div class="phase-num">4</div>
+        <span class="phase-days">Days 36–45</span>
+        <div class="phase-name">Graph Mastery</div>
+        <div class="phase-goal">Master traversal &amp; graph patterns</div>
+        <div class="phase-topics">
+          <span class="topic-tag">BFS</span>
+          <span class="topic-tag">DFS</span>
+          <span class="topic-tag">Topo Sort</span>
+        </div>
+        <div class="check-row">
+          <span class="check-label">progress</span>
+          <div class="check-boxes">
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="phase-card">
+        <div class="phase-num">5</div>
+        <span class="phase-days">Days 46–60</span>
+        <div class="phase-name">Advanced Thinking</div>
+        <div class="phase-goal">Handle complex problem solving</div>
+        <div class="phase-topics">
+          <span class="topic-tag">Backtracking</span>
+          <span class="topic-tag">Bin Search+</span>
+          <span class="topic-tag">Heap</span>
+        </div>
+        <div class="check-row">
+          <span class="check-label">progress</span>
+          <div class="check-boxes">
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 6 -->
+      <div class="phase-card striped">
+        <div class="phase-num">6</div>
+        <span class="phase-days">Days 61–80</span>
+        <div class="phase-name">Dynamic Programming</div>
+        <div class="phase-goal">Optimize brute force solutions</div>
+        <div class="phase-topics">
+          <span class="topic-tag">1D DP</span>
+          <span class="topic-tag">2D DP</span>
+          <span class="topic-tag">Interval DP</span>
+          <span class="topic-tag">Tree DP</span>
+        </div>
+        <div class="check-row">
+          <span class="check-label">progress</span>
+          <div class="check-boxes">
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+            <span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span><span class="cb"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDDLE: PATTERNS -->
+    <div style="display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 1;">
+      <div class="col-label">— Topic Patterns &amp; Techniques</div>
+
+      <div class="patterns-section">
+
+        <div class="pattern-card dark">
+          <div class="pattern-title">Arrays / Strings</div>
+          <ul class="pattern-items">
+            <li>Prefix Sum</li>
+            <li>Greedy approach</li>
+            <li>In-place ops</li>
+            <li>Simulation</li>
+            <li>Kadane's algo</li>
+            <li>Dutch flag</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card light">
+          <div class="pattern-title">Two Pointers</div>
+          <ul class="pattern-items">
+            <li>Opposite scan</li>
+            <li>Pair finding</li>
+            <li>Partitioning</li>
+            <li>3-Sum variant</li>
+            <li>Read/write ptr</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card gray">
+          <div class="pattern-title">Sliding Window</div>
+          <ul class="pattern-items">
+            <li>Dynamic window</li>
+            <li>Substring probs</li>
+            <li>Freq tracking</li>
+            <li>Fixed-size win</li>
+            <li>Min/max subarray</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card light">
+          <div class="pattern-title">Hashing</div>
+          <ul class="pattern-items">
+            <li>Frequency count</li>
+            <li>Fast lookup O(1)</li>
+            <li>Duplicate detect</li>
+            <li>Anagram check</li>
+            <li>Group by key</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card light">
+          <div class="pattern-title">Stack</div>
+          <ul class="pattern-items">
+            <li>LIFO pattern</li>
+            <li>Expression eval</li>
+            <li>Monotonic stack</li>
+            <li>Next greater elem</li>
+            <li>Bracket matching</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card dark">
+          <div class="pattern-title">Linked List</div>
+          <ul class="pattern-items">
+            <li>Pointer manip.</li>
+            <li>Slow/fast ptr</li>
+            <li>Reversal</li>
+            <li>Cycle detection</li>
+            <li>Merge lists</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card gray">
+          <div class="pattern-title">Trees</div>
+          <ul class="pattern-items">
+            <li>DFS (pre/in/post)</li>
+            <li>BFS level order</li>
+            <li>Construction</li>
+            <li>Path problems</li>
+            <li>LCA pattern</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card light">
+          <div class="pattern-title">Graphs</div>
+          <ul class="pattern-items">
+            <li>BFS shortest path</li>
+            <li>DFS connected</li>
+            <li>Cycle detection</li>
+            <li>Topo sort</li>
+            <li>Union-Find / DSU</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card dark">
+          <div class="pattern-title">Backtracking</div>
+          <ul class="pattern-items">
+            <li>Decision tree</li>
+            <li>Undo choices</li>
+            <li>Constraint solve</li>
+            <li>Permutations</li>
+            <li>Subsets / comb.</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card gray">
+          <div class="pattern-title">Binary Search</div>
+          <ul class="pattern-items">
+            <li>Search space cut</li>
+            <li>Monotonic cond.</li>
+            <li>Rotated array</li>
+            <li>On answer</li>
+            <li>Bisect left/right</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card light">
+          <div class="pattern-title">Heap / Priority Q</div>
+          <ul class="pattern-items">
+            <li>Top-K problems</li>
+            <li>Merge K lists</li>
+            <li>Stream median</li>
+            <li>Min/max heap</li>
+            <li>Scheduling</li>
+          </ul>
+        </div>
+
+        <div class="pattern-card dark">
+          <div class="pattern-title">Dynamic Prog.</div>
+          <ul class="pattern-items">
+            <li>Memoization</li>
+            <li>Tabulation</li>
+            <li>State transition</li>
+            <li>Knapsack vars.</li>
+            <li>LCS / LIS / Edit</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- EXTRA MISSING TOPICS -->
+      <div class="missing-section">
+        <div class="col-label">— Additional Topics to Master</div>
+        <div class="missing-tags">
+          <span class="missing-tag">Trie</span>
+          <span class="missing-tag">Segment Tree</span>
+          <span class="missing-tag">Fenwick Tree / BIT</span>
+          <span class="missing-tag">Dijkstra's algo</span>
+          <span class="missing-tag">Bellman-Ford</span>
+          <span class="missing-tag">Floyd-Warshall</span>
+          <span class="missing-tag">Kruskal's / Prim's MST</span>
+          <span class="missing-tag">Union-Find / DSU</span>
+          <span class="missing-tag">Bit Manipulation</span>
+          <span class="missing-tag">Queue (Deque)</span>
+          <span class="missing-tag">Matrix traversal</span>
+          <span class="missing-tag">Interval merging</span>
+          <span class="missing-tag">Cyclic sort</span>
+          <span class="missing-tag">Fast &amp; slow ptr</span>
+          <span class="missing-tag">Divide &amp; Conquer</span>
+          <span class="missing-tag">Counting sort</span>
+          <span class="missing-tag">KMP / Rabin-Karp</span>
+          <span class="missing-tag">Number theory GCD</span>
+        </div>
+      </div>
+
+      <!-- COMPLEXITY + ALGO TABLE ROW -->
+      <div class="mid-bottom">
+        <div class="complexity-section">
+          <div class="complexity-title">Big-O Complexity Ladder</div>
+          <div class="complexity-grid">
+            <div class="complexity-item best"><span class="cn">O(1)</span><span class="ct">Constant</span></div>
+            <div class="complexity-item good"><span class="cn">O(log n)</span><span class="ct">Log</span></div>
+            <div class="complexity-item ok"><span class="cn">O(n)</span><span class="ct">Linear</span></div>
+            <div class="complexity-item ok"><span class="cn">O(n log n)</span><span class="ct">Linearithmic</span></div>
+            <div class="complexity-item bad"><span class="cn">O(n²)</span><span class="ct">Quadratic</span></div>
+            <div class="complexity-item worst"><span class="cn">O(2ⁿ)</span><span class="ct">Exponential</span></div>
+          </div>
+        </div>
+
+        <div style="border: var(--border); padding: 8px 10px;">
+          <div class="col-label">— Problem-Solving Flow</div>
+          <div style="margin-top: 5px; font-family: 'Space Mono', monospace; font-size: 9px; line-height: 2;">
+            <div>① Read → Identify pattern</div>
+            <div>② Brute force → State transitions</div>
+            <div>③ Optimize → Remove redundancy</div>
+            <div>④ Code → Edge cases first</div>
+            <div>⑤ Test → Walk through examples</div>
+            <div>⑥ Revise → Re-solve in 3 days</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right-col">
+      <div class="col-label">— Daily Strategy</div>
+
+      <div class="daily-box">
+        <div class="col-label">Problems per day</div>
+        <div class="daily-row">
+          <div>
+            <div class="daily-type">Easy</div>
+          </div>
+          <div style="text-align:right;">
+            <span class="daily-count">2</span>
+            <span class="daily-unit"> /day</span>
+          </div>
+        </div>
+        <div class="daily-row">
+          <div>
+            <div class="daily-type">Medium</div>
+          </div>
+          <div style="text-align:right;">
+            <span class="daily-count">2</span>
+            <span class="daily-unit"> /day</span>
+          </div>
+        </div>
+        <div class="daily-row">
+          <div>
+            <div class="daily-type">Revision</div>
+          </div>
+          <div style="text-align:right;">
+            <span class="daily-count">1</span>
+            <span class="daily-unit"> /day</span>
+          </div>
+        </div>
+        <div class="daily-row">
+          <div>
+            <div class="daily-type">Total</div>
+          </div>
+          <div style="text-align:right;">
+            <span class="daily-count" style="font-size:32px;">5</span>
+            <span class="daily-unit"> /day</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFLECTION -->
+      <div class="reflect-box">
+        <div class="col-label" style="margin-bottom: 4px;">— Reflection Questions</div>
+        <div class="reflect-item">
+          <span class="reflect-num">1</span>
+          <span>What pattern does this problem use?</span>
+        </div>
+        <div class="reflect-item">
+          <span class="reflect-num">2</span>
+          <span>What did I miss initially?</span>
+        </div>
+        <div class="reflect-item">
+          <span class="reflect-num">3</span>
+          <span>Can I solve this faster next time?</span>
+        </div>
+        <div class="reflect-item">
+          <span class="reflect-num">4</span>
+          <span>What is the optimal time &amp; space?</span>
+        </div>
+        <div class="reflect-item">
+          <span class="reflect-num">5</span>
+          <span>Can I explain it without code?</span>
+        </div>
+      </div>
+
+      <!-- FOCUS -->
+      <div class="focus-box">
+        <div class="col-label" style="margin-bottom: 4px;">— Daily Focus Rules</div>
+        <div class="focus-item"><span class="cb"></span> Identify the pattern first</div>
+        <div class="focus-item"><span class="cb"></span> Avoid memorizing solutions</div>
+        <div class="focus-item"><span class="cb"></span> Re-solve without hints</div>
+        <div class="focus-item"><span class="cb"></span> Track all mistakes</div>
+        <div class="focus-item"><span class="cb"></span> Time yourself per problem</div>
+        <div class="focus-item"><span class="cb"></span> Review in 3-day intervals</div>
+      </div>
+
+      <!-- 80-DAY TRACKER -->
+      <div class="tracker-box">
+        <div class="col-label">— 80-Day Progress Tracker</div>
+        <div class="days-track">
+          <!-- 80 day cells -->
+          <div class="day-cell">1</div><div class="day-cell">2</div><div class="day-cell">3</div><div class="day-cell">4</div><div class="day-cell">5</div><div class="day-cell">6</div><div class="day-cell">7</div><div class="day-cell">8</div><div class="day-cell">9</div><div class="day-cell">10</div>
+          <div class="day-cell">11</div><div class="day-cell">12</div><div class="day-cell">13</div><div class="day-cell">14</div><div class="day-cell">15</div><div class="day-cell">16</div><div class="day-cell">17</div><div class="day-cell">18</div><div class="day-cell">19</div><div class="day-cell">20</div>
+          <div class="day-cell">21</div><div class="day-cell">22</div><div class="day-cell">23</div><div class="day-cell">24</div><div class="day-cell">25</div><div class="day-cell">26</div><div class="day-cell">27</div><div class="day-cell">28</div><div class="day-cell">29</div><div class="day-cell">30</div>
+          <div class="day-cell">31</div><div class="day-cell">32</div><div class="day-cell">33</div><div class="day-cell">34</div><div class="day-cell">35</div><div class="day-cell">36</div><div class="day-cell">37</div><div class="day-cell">38</div><div class="day-cell">39</div><div class="day-cell">40</div>
+          <div class="day-cell">41</div><div class="day-cell">42</div><div class="day-cell">43</div><div class="day-cell">44</div><div class="day-cell">45</div><div class="day-cell">46</div><div class="day-cell">47</div><div class="day-cell">48</div><div class="day-cell">49</div><div class="day-cell">50</div>
+          <div class="day-cell">51</div><div class="day-cell">52</div><div class="day-cell">53</div><div class="day-cell">54</div><div class="day-cell">55</div><div class="day-cell">56</div><div class="day-cell">57</div><div class="day-cell">58</div><div class="day-cell">59</div><div class="day-cell">60</div>
+          <div class="day-cell">61</div><div class="day-cell">62</div><div class="day-cell">63</div><div class="day-cell">64</div><div class="day-cell">65</div><div class="day-cell">66</div><div class="day-cell">67</div><div class="day-cell">68</div><div class="day-cell">69</div><div class="day-cell">70</div>
+          <div class="day-cell">71</div><div class="day-cell">72</div><div class="day-cell">73</div><div class="day-cell">74</div><div class="day-cell">75</div><div class="day-cell">76</div><div class="day-cell">77</div><div class="day-cell">78</div><div class="day-cell">79</div><div class="day-cell">80</div>
+        </div>
+        <div style="font-size: 8px; font-family: 'Space Mono', monospace; color: var(--gray-dark); margin-top: 5px;">
+          ✗ = solved &nbsp;|&nbsp; ○ = revised &nbsp;|&nbsp; ★ = mastered
+        </div>
+      </div>
+
+      <!-- MISTAKE LOG -->
+      <div class="mistake-box">
+        <div class="col-label" style="margin-bottom: 4px;">— Mistake Log</div>
+        <div class="mistake-line"><span class="ml-num">01</span><div class="ml-line"></div></div>
+        <div class="mistake-line"><span class="ml-num">02</span><div class="ml-line"></div></div>
+        <div class="mistake-line"><span class="ml-num">03</span><div class="ml-line"></div></div>
+        <div class="mistake-line"><span class="ml-num">04</span><div class="ml-line"></div></div>
+        <div class="mistake-line"><span class="ml-num">05</span><div class="ml-line"></div></div>
+        <div class="mistake-line"><span class="ml-num">06</span><div class="ml-line"></div></div>
+        <div class="mistake-line"><span class="ml-num">07</span><div class="ml-line"></div></div>
+        <div class="mistake-line"><span class="ml-num">08</span><div class="ml-line"></div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM STRIP -->
+  <div class="bottom-strip">
+    <div class="bottom-text">© DSA Master Sheet &nbsp;·&nbsp; Pattern Training System</div>
+    <div class="bottom-title">Not a checklist — a training system.</div>
+    <div class="bottom-text">80 Days &nbsp;·&nbsp; 5 Problems/Day &nbsp;·&nbsp; 400+ Problems Total</div>
+  </div>
+</div>
+
+</body>
+</html>
